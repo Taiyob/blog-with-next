@@ -1,0 +1,39 @@
+{
+  "name": "blog-site",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@nextui-org/react": "^2.6.11",
+    "@prisma/client": "^6.6.0",
+    "axios": "^1.9.0",
+    "bcryptjs": "^3.0.2",
+    "framer-motion": "^12.7.4",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.501.0",
+    "next": "15.3.1",
+    "next-auth": "^4.24.11",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sonner": "^2.0.3"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^20.17.30",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.1",
+    "prisma": "^6.6.0",
+    "tailwindcss": "^4",
+    "tsx": "^4.19.3",
+    "typescript": "^5"
+  }
+}

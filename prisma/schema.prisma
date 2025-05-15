@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String  @unique()
+  content   String?
+  image     String?
+  published Boolean @default(false)
+  views     Int     @default(0)
+  likes     Int     @default(0)
+
+  author   User @relation(fields: [authorId], references: [id])
+  authorId Int
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  like      Like[]
+  comment   Comment[]
+
+  @@map("posts")
+}
+
+model Like {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  post   Post @relation(fields: [postId], references: [id])
+  postId Int
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  postId Int
+  post   Post @relation(fields: [postId], references: [id])
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model Profile {
+  id           Int     @id @default(autoincrement())
+  bio          String?
+  profilePhoto String?
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("profiles")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  name     String?
+  password String
+
+  posts   Post[]
+  profile Profile?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  like      Like[]
+  comment   Comment[]
+
+  @@map("users")
+}
