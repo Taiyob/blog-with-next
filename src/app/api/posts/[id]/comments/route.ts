@@ -6,8 +6,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
+  const { id } = context.params;
   try {
     const user = await getCurrentUser(req);
     if (!user)
@@ -17,7 +18,7 @@ export async function POST(
     const comment = await prisma.comment.create({
       data: {
         content: body.content,
-        postId: Number(params.id),
+        postId: Number(id),
         userId: user.id,
       },
       include: {
@@ -32,12 +33,13 @@ export async function POST(
 }
 
 export async function GET(
-  _: NextRequest,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  context: { params: { id: string } }
 ) {
+  const { id } = context.params;
   try {
     const comments = await prisma.comment.findMany({
-      where: { postId: Number(params.id) },
+      where: { postId: Number(id) },
       orderBy: { createdAt: "desc" },
       include: {
         user: { select: { name: true } },
@@ -48,3 +50,48 @@ export async function GET(
     return NextResponse.json({ error: "Server Error" }, { status: 500 });
   }
 }
+
+// export async function POST(
+//   req: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   try {
+//     const user = await getCurrentUser(req);
+//     if (!user)
+//       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+//     const body = await req.json();
+//     const comment = await prisma.comment.create({
+//       data: {
+//         content: body.content,
+//         postId: Number(params.id),
+//         userId: user.id,
+//       },
+//       include: {
+//         user: { select: { name: true } },
+//       },
+//     });
+
+//     return NextResponse.json(comment);
+//   } catch (err) {
+//     return NextResponse.json({ error: "Server Error" }, { status: 500 });
+//   }
+// }
+
+// export async function GET(
+//   _: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   try {
+//     const comments = await prisma.comment.findMany({
+//       where: { postId: Number(params.id) },
+//       orderBy: { createdAt: "desc" },
+//       include: {
+//         user: { select: { name: true } },
+//       },
+//     });
+//     return NextResponse.json(comments);
+//   } catch (err) {
+//     return NextResponse.json({ error: "Server Error" }, { status: 500 });
+//   }
+// }
