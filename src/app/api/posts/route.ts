@@ -110,29 +110,49 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// export async function GET(req: NextRequest) {
-//   try {
-//     const { searchParams } = new URL(req.url);
-//     const page = parseInt(searchParams.get("page") || "1");
-//     const limit = 6;
-//     const skip = (page - 1) * limit;
-//     const posts = await prisma.post.findMany({
-//       skip,
-//       take: limit,
-//       orderBy: {
-//         createdAt: "desc",
-//       },
-//       include: {
-//         author: true,
-//       },
-//     });
+/*
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma"; // Update this path as needed
 
-//     return NextResponse.json(posts, { status: 200 });
-//   } catch (error) {
-//     console.error(error);
-//     return NextResponse.json(
-//       { error: "Failed to fetch posts" },
-//       { status: 500 }
-//     );
-//   }
-// }
+export async function POST(req: Request) {
+  const session = await getServerSession(authOptions);
+  console.log(session);
+
+  // 1️⃣ Check if logged in
+  if (!session || !session.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // 2️⃣ Allow only your account to post (email or ID-based)
+  const allowedEmails = ["your@email.com"]; // 🔁 replace with your real email
+
+  if (!allowedEmails.includes(session.user.email)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  // 3️⃣ Proceed with post creation
+  const body = await req.json();
+  const { title, content } = body;
+
+  try {
+    const newPost = await prisma.post.create({
+      data: {
+        title,
+        content,
+        authorId: Number(session.user.id),
+      },
+    });
+
+    return NextResponse.json(newPost, { status: 201 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Failed to create post" },
+      { status: 500 }
+    );
+  }
+}
+
+*/

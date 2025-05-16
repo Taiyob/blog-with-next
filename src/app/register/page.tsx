@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { UserPlus, Mail, Lock, User, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import LoadingDots from "@/components/Loader";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -71,16 +72,40 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8 min-h-screen bg-gradient-to-r from-teal-500 via-indigo-500 to-purple-500">
+    <div
+      className="flex flex-col justify-center py-12 sm:px-6 lg:px-8 min-h-screen bg-gradient-to-r bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage:
+          "url('https://img.freepik.com/free-photo/moon-light-shine-through-window-into-islamic-mosque-interior_1217-2597.jpg?semt=ais_hybrid&w=740')",
+        backgroundColor: "#fefaf1",
+      }}
+    >
       <motion.div
         className="sm:mx-auto sm:w-full sm:max-w-md"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-emerald-400">
-          Create your account
-        </h2>
+        <motion.h2
+          animate={{
+            opacity: [1, 0.7, 1],
+            filter: [
+              "blur(0px)",
+              "blur(1.5px)",
+              "blur(0px)",
+              "blur(1px)",
+              "blur(0px)",
+            ],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="mt-6 text-center text-3xl font-extrabold text-blue-900 bg-white/60 backdrop-blur-md inline-block px-4 py-2 rounded-xl shadow-lg shadow-blue-200/50"
+        >
+          Sign up to your account
+        </motion.h2>
       </motion.div>
       <motion.div
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
@@ -88,22 +113,19 @@ const RegisterPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <Card className="w-full max-w-md shadow-xl bg-gray-200 py-8 px-4 sm:rounded-lg sm:px-10">
+        <Card className="w-full max-w-md shadow-xl bg-transparent py-8 px-4 sm:rounded-lg sm:px-10">
           <form onSubmit={handleSubmit} className="space-y-6">
             <CardBody className="flex flex-col gap-4">
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-black"
+                  className="block text-sm font-bold text-white"
                 >
                   Full name
                 </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="mt-1 relative rounded-md shadow-sm bg-gray-300">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User
-                      className="h-5 w-5 text-gray-400"
-                      aria-hidden="true"
-                    />
+                    <User className="h-5 w-5 text-black" aria-hidden="true" />
                   </div>
                   <Input
                     id="name"
@@ -112,7 +134,7 @@ const RegisterPage = () => {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="block w-full px-3 py-2 pl-10  border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500  sm:text-sm focus:ring-0 focus:border-transparent focus:border-none !border-none !outline-none"
+                    className="block w-full px-3 py-2 pl-10  border border-gray-600 rounded-md shadow-sm placeholder-white focus:outline-none focus:ring-emerald-500  sm:text-sm focus:ring-0 focus:border-transparent focus:border-none !border-none !outline-none"
                     placeholder="John Doe"
                     aria-required
                   />
@@ -121,16 +143,13 @@ const RegisterPage = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-black"
+                  className="block text-sm font-bold text-white"
                 >
                   Email
                 </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="mt-1 relative rounded-md shadow-sm bg-gray-300">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail
-                      className="h-5 w-5 text-gray-400"
-                      aria-hidden="true"
-                    />
+                    <Mail className="h-5 w-5 text-black" aria-hidden="true" />
                   </div>
                   <Input
                     id="email"
@@ -139,7 +158,7 @@ const RegisterPage = () => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="block w-full px-3 py-2 pl-10  border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500  sm:text-sm focus:ring-0 focus:border-transparent focus:border-none !border-none !outline-none"
+                    className="block w-full px-3 py-2 pl-10  border border-gray-600 rounded-md shadow-sm placeholder-white focus:outline-none focus:ring-emerald-500  sm:text-sm focus:ring-0 focus:border-transparent focus:border-none !border-none !outline-none"
                     placeholder="example@gmail.com"
                     aria-required
                   />
@@ -148,16 +167,13 @@ const RegisterPage = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-black"
+                  className="block text-sm font-bold text-white"
                 >
                   Password
                 </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="mt-1 relative rounded-md shadow-sm bg-gray-300">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock
-                      className="h-5 w-5 text-gray-400"
-                      aria-hidden="true"
-                    />
+                    <Lock className="h-5 w-5 text-black" aria-hidden="true" />
                   </div>
                   <Input
                     id="password"
@@ -166,7 +182,7 @@ const RegisterPage = () => {
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="block w-full px-3 py-2 pl-10  border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500  sm:text-sm focus:ring-0 focus:border-transparent focus:border-none !border-none !outline-none"
+                    className="block w-full px-3 py-2 pl-10  border border-gray-600 rounded-md shadow-sm placeholder-white focus:outline-none focus:ring-emerald-500  sm:text-sm focus:ring-0 focus:border-transparent focus:border-none !border-none !outline-none"
                     placeholder="••••••••"
                     aria-required
                   />
@@ -175,16 +191,13 @@ const RegisterPage = () => {
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-black"
+                  className="block text-sm font-bold text-white"
                 >
                   Confirm Password
                 </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="mt-1 relative rounded-md shadow-sm bg-gray-300">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock
-                      className="h-5 w-5 text-gray-400"
-                      aria-hidden="true"
-                    />
+                    <Lock className="h-5 w-5 text-black" aria-hidden="true" />
                   </div>
                   <Input
                     id="confirmPassword"
@@ -193,7 +206,7 @@ const RegisterPage = () => {
                     required
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="block w-full px-3 py-2 pl-10  border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500  sm:text-sm focus:ring-0 focus:border-transparent focus:border-none !border-none !outline-none"
+                    className="block w-full px-3 py-2 pl-10  border border-gray-600 rounded-md shadow-sm placeholder-white focus:outline-none focus:ring-emerald-500  sm:text-sm focus:ring-0 focus:border-transparent focus:border-none !border-none !outline-none"
                     placeholder="••••••••"
                   />
                 </div>
@@ -214,7 +227,7 @@ const RegisterPage = () => {
                       className="mr-2 h-5 w-5 animate-spin"
                       aria-hidden="true"
                     />
-                    Loading...
+                    <LoadingDots />
                   </>
                 ) : (
                   <>
@@ -225,6 +238,14 @@ const RegisterPage = () => {
               </Button>
             </CardFooter>
           </form>
+          <p>
+            Already have an account?{" "}
+            <span>
+              <a href="/login">
+                Please <span className="font-bold text-white">Sign In</span>
+              </a>
+            </span>
+          </p>
         </Card>
       </motion.div>
     </div>

@@ -5,6 +5,9 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
+import HalalJhalNavbar from "@/components/Navbar";
+import { useRouter } from "next/navigation";
+import LoadingDots from "@/components/Loader";
 
 const LIMIT = 6;
 
@@ -14,6 +17,7 @@ const HomeScreen = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef(null);
+  const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [sentimentFilter, setSentimentFilter] = useState("");
@@ -71,7 +75,10 @@ const HomeScreen = () => {
   }, [loading, hasMore, page, fetchPosts]);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
+    <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="mb-5">
+        <HalalJhalNavbar />
+      </div>
       <div className="bg-yellow-100 border border-yellow-300 p-5 rounded mb-6 text-sm text-gray-800">
         <p className="font-semibold">Assalamu Alaikum wa Rahmatullah,</p>
         <p className="mt-2">
@@ -106,7 +113,7 @@ const HomeScreen = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <select
-          className="px-3 py-2 border rounded-md"
+          className="px-3 py-2 border rounded-md hidden"
           value={sentimentFilter}
           onChange={(e) => setSentimentFilter(e.target.value)}
         >
@@ -157,6 +164,44 @@ const HomeScreen = () => {
                     { liked: !post.likedByMe },
                     { withCredentials: true }
                   );
+
+                  const updated = res.data;
+
+                  setPosts((prev) =>
+                    prev.map((p) =>
+                      p.id === post.id
+                        ? {
+                            ...p,
+                            likes: updated.likes,
+                            likedByMe: !p.likedByMe,
+                          }
+                        : p
+                    )
+                  );
+                } catch (err: any) {
+                  if (err.response?.status === 401) {
+                    router.push("/login");
+                  } else {
+                    console.error("Failed to like:", err);
+                  }
+                }
+              }}
+              className={`text-sm flex items-center gap-1 ${
+                post.likedByMe
+                  ? "text-red-500"
+                  : "text-gray-600 hover:text-red-500"
+              }`}
+            >
+              {post.likedByMe ? "❤️" : "🤍"} {post.likes}
+            </button>
+            {/* <button
+              onClick={async () => {
+                try {
+                  const res = await axios.post(
+                    `/api/posts/${post.id}/like`,
+                    { liked: !post.likedByMe },
+                    { withCredentials: true }
+                  );
                   const updated = res.data;
 
                   setPosts((prev) =>
@@ -181,14 +226,18 @@ const HomeScreen = () => {
               }`}
             >
               {post.likedByMe ? "❤️" : "🤍"} {post.likes}
-            </button>
+            </button> */}
           </div>
         </div>
       ))}
 
       {/* Loader or End */}
       <div ref={observerRef} className="h-10 flex justify-center items-center">
-        {loading && <span>Loading more...</span>}
+        {loading && (
+          <span>
+            <LoadingDots />
+          </span>
+        )}
         {!hasMore && !loading && <span>No more posts.</span>}
       </div>
     </div>
