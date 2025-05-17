@@ -4,13 +4,10 @@ import { getCurrentUser } from "@/lib/getCurrentUser";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-type Context = {
-  params: {
-    id: string;
-  };
-};
-
-export async function POST(req: NextRequest, context: Context) {
+export async function POST(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
   try {
     const user = await getCurrentUser(req);
     if (!user)
@@ -34,7 +31,10 @@ export async function POST(req: NextRequest, context: Context) {
   }
 }
 
-export async function GET(req: NextRequest, context: Context) {
+export async function GET(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
   try {
     const comments = await prisma.comment.findMany({
       where: { postId: Number(context.params.id) },
