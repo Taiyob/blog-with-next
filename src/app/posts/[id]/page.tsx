@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import CommentSection from "./CommentSection";
+import { notFound } from "next/navigation";
 
 interface PostPageProps {
   params: {
@@ -13,7 +14,8 @@ export default async function PostDetailPage({ params }: PostPageProps) {
     include: { author: true },
   });
 
-  if (!post) return <div className="p-4">Post not found.</div>;
+  // if (!post) return <div className="p-4">Post not found.</div>;
+  if (!post) return notFound();
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
