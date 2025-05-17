@@ -6,18 +6,19 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const user = await getCurrentUser(req);
-    if (!user)
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
     const body = await req.json();
     const comment = await prisma.comment.create({
       data: {
         content: body.content,
-        postId: Number(context.params.id),
+        postId: Number(params.id),
         userId: user.id,
       },
       include: {
@@ -33,16 +34,17 @@ export async function POST(
 
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const comments = await prisma.comment.findMany({
-      where: { postId: Number(context.params.id) },
+      where: { postId: Number(params.id) },
       orderBy: { createdAt: "desc" },
       include: {
         user: { select: { name: true } },
       },
     });
+
     return NextResponse.json(comments);
   } catch (err) {
     return NextResponse.json({ error: "Server Error" }, { status: 500 });
