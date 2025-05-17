@@ -2,13 +2,17 @@ import { prisma } from "@/lib/prisma";
 import CommentSection from "./CommentSection";
 import { notFound } from "next/navigation";
 
-interface PostPageProps {
-  params: {
-    id: string;
-  };
-}
+// interface PostPageProps {
+//   params: {
+//     id: string;
+//   };
+// }
 
-export default async function PostDetailPage({ params }: PostPageProps) {
+export default async function PostDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const post = await prisma.post.findUnique({
     where: { id: Number(params.id) },
     include: { author: true },
