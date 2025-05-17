@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } }
-) {
+): Promise<NextResponse> {
   try {
     const user = await getCurrentUser(req);
     if (!user) {
@@ -18,7 +18,7 @@ export async function POST(
     const comment = await prisma.comment.create({
       data: {
         content: body.content,
-        postId: Number(params.id),
+        postId: parseInt(params.id),
         userId: user.id,
       },
       include: {
@@ -27,7 +27,7 @@ export async function POST(
     });
 
     return NextResponse.json(comment);
-  } catch (err) {
+  } catch (error) {
     return NextResponse.json({ error: "Server Error" }, { status: 500 });
   }
 }
@@ -35,18 +35,22 @@ export async function POST(
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
-) {
+): Promise<NextResponse> {
   try {
     const comments = await prisma.comment.findMany({
-      where: { postId: Number(params.id) },
-      orderBy: { createdAt: "desc" },
+      where: {
+        postId: parseInt(params.id),
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
       include: {
         user: { select: { name: true } },
       },
     });
 
     return NextResponse.json(comments);
-  } catch (err) {
+  } catch (error) {
     return NextResponse.json({ error: "Server Error" }, { status: 500 });
   }
 }
